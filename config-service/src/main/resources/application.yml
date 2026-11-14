@@ -1,0 +1,23 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: config-service
+  datasource:
+    url: jdbc:h2:mem:configdb;DB_CLOSE_DELAY=-1
+  jpa:
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER:http://localhost:8180/realms/hub-realm}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
