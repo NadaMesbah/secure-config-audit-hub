@@ -1,0 +1,76 @@
+{
+  "realm": "hub-realm",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "accessTokenLifespan": 300,
+
+  "roles": {
+    "realm": [
+      { "name": "admin",            "description": "Full access" },
+      { "name": "developer",        "description": "Read, create, update configs" },
+      { "name": "auditor",          "description": "Read configs and audit" },
+      { "name": "svc-audit-writer", "description": "Service role: write audit events only" }
+    ]
+  },
+
+  "users": [
+    {
+      "username": "alice",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Alice",
+      "lastName": "Admin",
+      "email": "alice@example.com",
+      "credentials": [{ "type": "password", "value": "alice123", "temporary": false }],
+      "realmRoles": ["admin"]
+    },
+    {
+      "username": "bob",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Bob",
+      "lastName": "Developer",
+      "email": "bob@example.com",
+      "credentials": [{ "type": "password", "value": "bob123", "temporary": false }],
+      "realmRoles": ["developer"]
+    },
+    {
+      "username": "carol",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Carol",
+      "lastName": "Auditor",
+      "email": "carol@example.com",
+      "credentials": [{ "type": "password", "value": "carol123", "temporary": false }],
+      "realmRoles": ["auditor"]
+    },
+    {
+      "username": "service-account-hub-service",
+      "enabled": true,
+      "serviceAccountClientId": "hub-service",
+      "realmRoles": ["svc-audit-writer"]
+    }
+  ],
+
+  "clients": [
+    {
+      "clientId": "postman-client",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": false,
+      "serviceAccountsEnabled": false
+    },
+    {
+      "clientId": "hub-service",
+      "enabled": true,
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "dev-secret-change-me",
+      "serviceAccountsEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "standardFlowEnabled": false
+    }
+  ]
+}
