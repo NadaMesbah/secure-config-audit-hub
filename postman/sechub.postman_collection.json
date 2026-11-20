@@ -1,0 +1,1045 @@
+{
+  "info": {
+    "name": "Secure Config & Audit Hub",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Scenarios du contrat v1 (section 12). Lancer l'environnement sechub-local, puis Run collection. Les tokens durent 5 minutes."
+  },
+  "item": [
+    {
+      "name": "00 Tokens",
+      "item": [
+        {
+          "name": "Token alice",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{keycloakUrl}}/realms/hub-realm/protocol/openid-connect/token",
+              "host": [
+                "{{keycloakUrl}}"
+              ],
+              "path": [
+                "realms",
+                "hub-realm",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "postman-client",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "alice",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{alice_password}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const prev = pm.environment.get(\"token_alice\");",
+                  "if (prev) { pm.environment.set(\"token_expired\", prev); }",
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.environment.set(\"token_alice\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token bob",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{keycloakUrl}}/realms/hub-realm/protocol/openid-connect/token",
+              "host": [
+                "{{keycloakUrl}}"
+              ],
+              "path": [
+                "realms",
+                "hub-realm",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "postman-client",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "bob",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{bob_password}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.environment.set(\"token_bob\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token carol",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{keycloakUrl}}/realms/hub-realm/protocol/openid-connect/token",
+              "host": [
+                "{{keycloakUrl}}"
+              ],
+              "path": [
+                "realms",
+                "hub-realm",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "postman-client",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "carol",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{carol_password}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.environment.set(\"token_carol\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token hub-service (client credentials)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{keycloakUrl}}/realms/hub-realm/protocol/openid-connect/token",
+              "host": [
+                "{{keycloakUrl}}"
+              ],
+              "path": [
+                "realms",
+                "hub-realm",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "hub-service",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{hubClientSecret}}",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.environment.set(\"token_service\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 Scenarios (contrat 12)",
+      "item": [
+        {
+          "name": "S1 alice cree une config -> 201",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_alice}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"application\": \"payment-api\",\n  \"environment\": \"prod\",\n  \"key\": \"db.pool.size\",\n  \"value\": \"20\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 201\", () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "pm.test(\"version 1 et updatedBy alice\", () => { pm.expect(j.version).to.eql(1); pm.expect(j.updatedBy).to.eql(\"alice\"); });",
+                  "pm.environment.set(\"configId\", j.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S2 bob modifie la config -> 200, version 2",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs/{{configId}}",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs",
+                "{{configId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_bob}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"application\": \"payment-api\",\n  \"environment\": \"prod\",\n  \"key\": \"db.pool.size\",\n  \"value\": \"30\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test(\"version 2, valeur 30, updatedBy bob\", () => { pm.expect(j.version).to.eql(2); pm.expect(j.value).to.eql(\"30\"); pm.expect(j.updatedBy).to.eql(\"bob\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S3 bob supprime la config -> 403",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs/{{configId}}",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs",
+                "{{configId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_bob}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 403\", () => pm.response.to.have.status(403));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(403); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S4a carol liste les configs -> 200",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_carol}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"tableau non vide\", () => pm.expect(pm.response.json().length).to.be.above(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S4b carol cree une config -> 403",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_carol}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"application\": \"payment-api\",\n  \"environment\": \"prod\",\n  \"key\": \"db.pool.size\",\n  \"value\": \"20\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 403\", () => pm.response.to.have.status(403));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(403); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S5a carol lit /api/audit -> 200, voit S1 a S4",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/audit?size=50",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "50"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_carol}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "const c = pm.response.json().content;",
+                  "const has = (a, ac, o) => c.some(e => e.actor === a && e.action === ac && e.outcome === o);",
+                  "pm.test(\"alice CREATE_CONFIG ALLOWED\", () => pm.expect(has(\"alice\",\"CREATE_CONFIG\",\"ALLOWED\")).to.be.true);",
+                  "pm.test(\"bob UPDATE_CONFIG ALLOWED\", () => pm.expect(has(\"bob\",\"UPDATE_CONFIG\",\"ALLOWED\")).to.be.true);",
+                  "pm.test(\"bob DELETE_CONFIG DENIED\", () => pm.expect(has(\"bob\",\"DELETE_CONFIG\",\"DENIED\")).to.be.true);",
+                  "pm.test(\"carol CREATE_CONFIG DENIED\", () => pm.expect(has(\"carol\",\"CREATE_CONFIG\",\"DENIED\")).to.be.true);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S5b bob lit /api/audit -> 403",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/audit",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "audit"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_bob}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 403\", () => pm.response.to.have.status(403));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(403); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S6 sans token -> 401",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(401); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S7a Audit direct, token alice -> 403",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{auditUrl}}/audit/events",
+              "host": [
+                "{{auditUrl}}"
+              ],
+              "path": [
+                "audit",
+                "events"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_alice}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"demo-001\",\n  \"actor\": \"alice\",\n  \"actorType\": \"USER\",\n  \"action\": \"UPDATE_CONFIG\",\n  \"resource\": \"config/42\",\n  \"outcome\": \"ALLOWED\",\n  \"sourceService\": \"hub-service\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 403\", () => pm.response.to.have.status(403));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(403); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S7b Audit direct, token de service du Hub -> 201",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{auditUrl}}/audit/events",
+              "host": [
+                "{{auditUrl}}"
+              ],
+              "path": [
+                "audit",
+                "events"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_service}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"demo-001\",\n  \"actor\": \"alice\",\n  \"actorType\": \"USER\",\n  \"action\": \"UPDATE_CONFIG\",\n  \"resource\": \"config/42\",\n  \"outcome\": \"ALLOWED\",\n  \"sourceService\": \"hub-service\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"timestamp fixe par le serveur\", () => pm.expect(pm.response.json().timestamp).to.exist);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S8 Config direct, sans token -> 401",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{configUrl}}/configs",
+              "host": [
+                "{{configUrl}}"
+              ],
+              "path": [
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(401); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "S9a token falsifie -> 401",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_tampered}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const t = pm.environment.get(\"token_alice\") || \"\";",
+                  "if (t.length > 10) {",
+                  "  const i = t.length - 3;",
+                  "  pm.environment.set(\"token_tampered\", t.substring(0, i) + (t[i] === \"A\" ? \"B\" : \"A\") + t.substring(i + 1));",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(401); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 Complements (erreurs 8)",
+      "item": [
+        {
+          "name": "B1 donnees invalides (alice) -> 400 avec fieldErrors",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_alice}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"application\": \"\",\n  \"environment\": \"test\",\n  \"key\": \"k\",\n  \"value\": \"v\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"fieldErrors presents\", () => { const f = pm.response.json().fieldErrors; pm.expect(f).to.exist; pm.expect(f.application).to.exist; pm.expect(f.environment).to.exist; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "B2 config inconnue (alice) -> 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs/999999",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs",
+                "999999"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_alice}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "B3 doublon (alice) -> 409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_alice}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"application\": \"payment-api\",\n  \"environment\": \"prod\",\n  \"key\": \"db.pool.size\",\n  \"value\": \"20\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 Nettoyage",
+      "item": [
+        {
+          "name": "C1 alice supprime la config -> 204",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs/{{configId}}",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs",
+                "{{configId}}"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_alice}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 204\", () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 Manuel - token expire (decocher pour le run)",
+      "item": [
+        {
+          "name": "S9b token EXPIRE -> 401 (a lancer seul, 5 min apres avoir relance Token alice)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hubUrl}}/api/configs",
+              "host": [
+                "{{hubUrl}}"
+              ],
+              "path": [
+                "api",
+                "configs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_expired}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"JSON d'erreur avec correlationId\", () => { const j = pm.response.json(); pm.expect(j.status).to.eql(401); pm.expect(j.correlationId).to.exist; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
