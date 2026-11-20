@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: hub-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER:http://localhost:8180/realms/hub-realm}
+
+sechub:
+  keycloak:
+    token-uri: ${KEYCLOAK_TOKEN_URI:http://localhost:8180/realms/hub-realm/protocol/openid-connect/token}
+    client-id: hub-service
+    client-secret: ${HUB_CLIENT_SECRET:dev-secret-change-me}
+  downstream:
+    config-url: ${CONFIG_SERVICE_URL:http://localhost:8082}
+    audit-url: ${AUDIT_SERVICE_URL:http://localhost:8083}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  pattern:
+    level: "%5p [%X{correlationId:-}]"
