@@ -8,4 +8,4 @@ services:
     ports:
       - "8180:8080"
     volumes:
-      - ./infra/keycloak/hub-realm.json:/opt/keycloak/data/import/hub-realm.json:ro
+      - ./infra/keycloak/hub-realm.json:/opt/keycloak/data/import/hub-realm-realm.json:ro
