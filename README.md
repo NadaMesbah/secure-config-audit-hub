@@ -2,8 +2,6 @@
 
 Three Java microservices secured with Zero Trust (authentication, authorization and inter-service trust): OAuth2/OIDC + JWT issued by Keycloak, and RBAC. Each service validates the JWT itself.
 
-The project contract is in `docs/CONTRACT.md`.
-
 ## Architecture
 
 - Keycloak (:8180), realm `hub-realm`, issues the JWTs (users and service account).
@@ -46,7 +44,7 @@ Modules: `common-security` (shared JWT/role/error/correlation code), `hub-servic
        http://localhost:8082/actuator/health
        http://localhost:8083/actuator/health
 
-All settings have local defaults (see `KEYCLOAK_ISSUER`, `KEYCLOAK_TOKEN_URI`, `HUB_CLIENT_SECRET`, `CONFIG_SERVICE_URL`, `AUDIT_SERVICE_URL` in the contract), so nothing needs to be set. To stop Keycloak: `docker compose down`.
+All settings have local defaults (overridable variables: `KEYCLOAK_ISSUER`, `KEYCLOAK_TOKEN_URI`, `HUB_CLIENT_SECRET`, `CONFIG_SERVICE_URL`, `AUDIT_SERVICE_URL`), so nothing needs to be set. To stop Keycloak: `docker compose down`.
 
 ## Test users (development only)
 
